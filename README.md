@@ -14,8 +14,8 @@ L'algorithme suit trois grandes étapes :
 - Comparer les performances avec d'autres méthodes d’approximation.
 
 ## ⚙️ Fonctionnalités
-✅ Générateur d'instances (coordonnées aléatoires, calcul des distances, sauvegarde/lecture fichier)
-✅ Algorithme de Prim (MST) (Première étape de Christofides)
+✅ Générateur d'instances (coordonnées aléatoires, calcul des distances, sauvegarde/lecture fichier)  
+✅ Algorithme de Prim (MST) (Première étape de Christofides)  
 🔄 À venir :
 
 - Détection des sommets impairs & appariement parfait

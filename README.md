@@ -9,18 +9,18 @@ L'algorithme suit trois grandes étapes :
 - Créer un circuit eulérien et transformer la solution en un tour valide du TSP
 
 ## 🎯 Objectifs
-Générer et manipuler une matrice de distances.
-Implémenter Christofides étape par étape.
-Comparer les performances avec d'autres méthodes d’approximation.
+- Générer et manipuler une matrice de distances.
+- Implémenter Christofides étape par étape.
+- Comparer les performances avec d'autres méthodes d’approximation.
 
 ## ⚙️ Fonctionnalités
 ✅ Générateur d'instances (coordonnées aléatoires, calcul des distances, sauvegarde/lecture fichier)
 ✅ Algorithme de Prim (MST) (Première étape de Christofides)
 🔄 À venir :
 
-Détection des sommets impairs & appariement parfait
-Construction du circuit eulérien
-Transformation en un tour TSP valide
+- Détection des sommets impairs & appariement parfait
+- Construction du circuit eulérien
+- Transformation en un tour TSP valide
 
 ## 📂 Structure du projet
 graphql

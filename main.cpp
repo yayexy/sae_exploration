@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <limits>
-
 #include <queue>
 
 struct City
@@ -31,66 +30,91 @@ float calculateDistance(const City& a, const City& b){
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
-std::vector<std::vector<float>> generateInstance(const int& totalCities, const int& areaSize){
-    std::vector<City> cities(totalCities);
-    std::vector<std::vector<float>> distanceMatrix(totalCities, std::vector<float>(totalCities));
+std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice){
+    std::vector<std::vector<float>> distanceMatrix;
 
-    // Randomly generating city coordinates
-    for (int i = 0; i < totalCities; i++)
+    if (choice == 1)
     {
-        cities[i].x = rand() % areaSize;
-        cities[i].y = rand() % areaSize;
-    }
+        std::cout << "Enter the number of cities: ";
+        std::cin >> totalCities;
 
-    for (int i = 0; i < totalCities; i++)
-    {
-        for (int j = 0; j < totalCities; j++)
+        distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
+        std::vector<City> cities(totalCities);
+
+        // Randomly generating city coordinates
+        for (int i = 0; i < totalCities; i++)
         {
-            if (i == j)
+            cities[i].x = rand() % areaSize;
+            cities[i].y = rand() % areaSize;
+        }
+
+        for (int i = 0; i < totalCities; i++)
+        {
+            for (int j = 0; j < totalCities; j++)
             {
-                distanceMatrix[i][j] = 0;
-            }
-            else
-            {
-                distanceMatrix[i][j] = calculateDistance(cities[i], cities[j]);
+                if (i == j)
+                {
+                    distanceMatrix[i][j] = 0;
+                }
+                else
+                {
+                    distanceMatrix[i][j] = calculateDistance(cities[i], cities[j]);
+                }
             }
         }
-    }
-    
-    // Opening the file to write the instance
-    std::ofstream file("instance.txt");
-    if (!file)
-    {
-        std::cerr << "Error opening the file!" << std::endl;
-        return distanceMatrix;
-    }
-
-    file << totalCities << std::endl;
-
-    for (int i = 0; i < totalCities; i++)
-    {
-        for (int j = 0; j < totalCities; j++)
+        
+        // Opening the file to write the instance
+        std::ofstream file("instance.txt");
+        if (!file)
         {
-            if (i == j)
+            std::cerr << "Error opening the file!" << std::endl;
+            return distanceMatrix;
+        }
+
+        file << totalCities << std::endl;
+
+        for (int i = 0; i < totalCities; i++)
+        {
+            for (int j = 0; j < totalCities; j++)
             {
-                file << "0 ";
+                if (i == j)
+                {
+                    file << "0 ";
+                }
+                else
+                {
+                    file << calculateDistance(cities[i], cities[j]) << " ";
+                }
             }
-            else
+            file << std::endl;
+        }
+
+        file.close();
+        std::cout << "Instance generated and saved successfully!" << std::endl;
+    }
+    else
+    {
+        std::ifstream file("instance.txt");
+        if (!file)
+        {
+            std::cerr << "Error opening the file!" << std::endl;
+            return distanceMatrix;
+        }
+        
+        file >> totalCities;
+        distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
+        
+        for (int i = 0; i < totalCities; i++)
+        {
+            for (int j = 0; j < totalCities; j++)
             {
-                file << calculateDistance(cities[i], cities[j]) << " ";
+                file >> distanceMatrix[i][j];
             }
         }
-        file << std::endl;
-    }
-    
-    file << std::endl;
 
-    for (int i = 0; i < totalCities; i++) {
-        file << "City " << i << " : x = " << cities[i].x << " / y = " << cities[i].y << std::endl;
+        file.close();
+        std::cout << "Instance imported successfully!" << std::endl;
     }
-
-    file.close();
-    std::cout << "Instance generated and saved successfully!" << std::endl;
 
     return distanceMatrix;
 }
@@ -137,20 +161,16 @@ int main(){
     srand(time(NULL));
 
     int areaSize = 1000;
-
     int totalCities;
-    std::cout << "Enter the number of cities: ";
-    std::cin >> totalCities;
+    int choice;
 
-    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize);
+    do
+    {
+        std::cout << "Do you want to create a new graph or use an existing one? (1 - Yes / 0 - No): ";
+        std::cin >> choice;
+    } while (choice != 0 && choice != 1);
     
-    // std::vector<std::vector<float>> distanceMatrix = {
-    //     {0, 757.341, 339.236, 735.218, 424.449},
-    //     {757.341, 0, 587.231, 365.308, 441.38},
-    //     {339.236, 587.231, 0, 431.335, 148.189},
-    //     {735.218, 365.308, 431.335, 0, 311.04},
-    //     {424.449, 441.38, 148.189, 311.04, 0}
-    // };
+    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice);
 
     std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix);
     

@@ -1,39 +1,61 @@
-SAÉ S2.02 - Exploration Algorithmique du Problème du Voyageur de Commerce
-📌 Description
-Ce projet a pour objectif d'explorer différentes approches algorithmiques pour résoudre le problème du voyageur de commerce (Traveling Salesman Problem - TSP). Ce problème consiste à trouver le chemin le plus court passant par un ensemble de villes (ou restaurants dans notre cas) exactement une seule fois avant de revenir au point de départ.
+# SAÉ S2.02 - Exploration Algorithmique du TSP (Christofides)
 
-🎯 Objectifs
-Générer des instances du problème (coordonnées aléatoires de villes/restaurants).
-Construire et manipuler une matrice de distances entre ces villes.
-Implémenter et comparer différents algorithmes de résolution.
-Évaluer les performances des algorithmes en termes de qualité de solution et de temps de calcul.
-⚙️ Fonctionnalités
-✅ Générateur d'instances :
+## 📝 Description
+Ce projet consiste à implémenter l'algorithme de Christofides pour résoudre le problème du voyageur de commerce (Traveling Salesman Problem - TSP).
+L'algorithme suit trois grandes étapes :
 
-Génération aléatoire des coordonnées des villes.
-Calcul des distances entre chaque paire de villes.
-Sauvegarde et lecture des instances dans un fichier.
-✅ Algorithmes implémentés :
+Construction d'un Arbre Recouvrant Minimal (MST) ✅ (Actuellement implémenté)
+Trouver les sommets de degré impair & construire un appariement parfait
+Créer un circuit eulérien et transformer la solution en un tour valide du TSP
 
-Prim’s Algorithm : Construction d’un Arbre Recouvrant Minimal (MST) utilisé pour approximer la solution du TSP.
-Autres algorithmes (à compléter selon les besoins) :
-Glouton (Greedy)
-2-opt
-Colonie de Fourmis
-Algorithme Génétique
-✅ Comparaison des solutions :
+## 🎯 Objectifs
+Générer et manipuler une matrice de distances.
+Implémenter Christofides étape par étape.
+Comparer les performances avec d'autres méthodes d’approximation.
 
-Évaluation du coût total des parcours générés.
-Analyse des performances des algorithmes.
-📂 Structure du projet
+## ⚙️ Fonctionnalités
+✅ Générateur d'instances (coordonnées aléatoires, calcul des distances, sauvegarde/lecture fichier)
+✅ Algorithme de Prim (MST) (Première étape de Christofides)
+🔄 À venir :
+
+Détection des sommets impairs & appariement parfait
+Construction du circuit eulérien
+Transformation en un tour TSP valide
+
+## 📂 Structure du projet
 graphql
 Copy
 Edit
-📁 SAÉ_S2_02
+
+## 📁 SAÉ_S2_02
 │── 📄 main.cpp          # Programme principal
 │── 📄 generateInstance.cpp  # Génération des instances
-│── 📄 primAlgorithm.cpp     # Implémentation de l'algorithme de Prim
-│── 📄 utils.cpp        # Fonctions utilitaires (calcul de distances, affichage, etc.)
-│── 📄 input.txt        # Fichier contenant une instance du TSP
-│── 📄 output.txt       # Résultat de l'algorithme (ordre des villes visitées)
-│── 📄 README.md        # Documentation du projet
+│── 📄 mst.cpp           # Algorithme de Prim (MST)
+│── 📄 christofides.cpp  # Implémentation complète de Christofides (en cours)
+│── 📄 utils.cpp         # Fonctions utilitaires (calcul de distances, affichage, etc.)
+│── 📄 input.txt         # Fichier contenant une instance du TSP
+│── 📄 output.txt        # Résultat final du TSP
+│── 📄 README.md         # Documentation du projet
+
+## 🚀 Installation et Exécution
+1️⃣ Compilation
+bash
+Copy
+Edit
+g++ -o tsp main.cpp generateInstance.cpp mst.cpp christofides.cpp utils.cpp -O2
+2️⃣ Exécution
+bash
+Copy
+Edit
+./tsp
+Créer un nouveau graphe avec des villes aléatoires.
+Utiliser une instance existante (fichier input.txt).
+
+## 📊 Critères d'évaluation
+Qualité du parcours obtenu (Comparaison avec d'autres heuristiques)
+Temps de calcul (Efficacité de l'algorithme sur des instances de grande taille)
+## 👥 Auteurs
+[Votre Nom]
+[Autres membres du groupe]
+Projet réalisé dans le cadre du B.U.T. Informatique - SAÉ S2.02 🎓🚀
+

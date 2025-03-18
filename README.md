@@ -23,10 +23,7 @@ L'algorithme suit trois grandes étapes :
 - Transformation en un tour TSP valide
 
 ## 📂 Structure du projet
-graphql
-Copy
-Edit
-
+```bash
 ## 📁 SAÉ_S2_02
 │── 📄 main.cpp          # Programme principal
 │── 📄 generateInstance.cpp  # Génération des instances
@@ -36,6 +33,7 @@ Edit
 │── 📄 input.txt         # Fichier contenant une instance du TSP
 │── 📄 output.txt        # Résultat final du TSP
 │── 📄 README.md         # Documentation du projet
+```
 
 ## 🚀 Installation et Exécution
 1️⃣ Compilation

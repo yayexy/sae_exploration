@@ -4,9 +4,9 @@
 Ce projet consiste à implémenter l'algorithme de Christofides pour résoudre le problème du voyageur de commerce (Traveling Salesman Problem - TSP).
 L'algorithme suit trois grandes étapes :
 
-Construction d'un Arbre Recouvrant Minimal (MST) ✅ (Actuellement implémenté)
-Trouver les sommets de degré impair & construire un appariement parfait
-Créer un circuit eulérien et transformer la solution en un tour valide du TSP
+- Construction d'un Arbre Recouvrant Minimal (MST) ✅ (Actuellement implémenté)
+- Trouver les sommets de degré impair & construire un appariement parfait
+- Créer un circuit eulérien et transformer la solution en un tour valide du TSP
 
 ## 🎯 Objectifs
 Générer et manipuler une matrice de distances.

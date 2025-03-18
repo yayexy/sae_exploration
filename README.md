@@ -4,7 +4,7 @@
 Ce projet consiste à implémenter l'algorithme de Christofides pour résoudre le problème du voyageur de commerce (Traveling Salesman Problem - TSP).
 L'algorithme suit trois grandes étapes :
 
-- Construction d'un Arbre Recouvrant Minimal (MST) ✅ (Actuellement implémenté)
+- Construction d'un Arbre Recouvrant Minimal (MST)
 - Trouver les sommets de degré impair & construire un appariement parfait
 - Créer un circuit eulérien et transformer la solution en un tour valide du TSP
 
@@ -16,11 +16,9 @@ L'algorithme suit trois grandes étapes :
 ## ⚙️ Fonctionnalités
 ✅ Générateur d'instances (coordonnées aléatoires, calcul des distances, sauvegarde/lecture fichier)  
 ✅ Algorithme de Prim (MST) (Première étape de Christofides)  
-🔄 À venir :
-
-- Détection des sommets impairs & appariement parfait
-- Construction du circuit eulérien
-- Transformation en un tour TSP valide
+✅ Détection des sommets impairs & appariement parfait  
+✅ Construction du circuit eulérien  
+✅ Transformation en un tour TSP valide  
 
 ## 📂 Structure du projet
 ```graphql
@@ -57,4 +55,3 @@ g++ -o tsp main.cpp generateInstance.cpp mst.cpp christofides.cpp utils.cpp -O2
 whoselevenn  
 
 Projet réalisé dans le cadre du B.U.T. Informatique - SAÉ S2.02 🎓🚀
-

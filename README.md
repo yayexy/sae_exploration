@@ -23,8 +23,8 @@ L'algorithme suit trois grandes étapes :
 - Transformation en un tour TSP valide
 
 ## 📂 Structure du projet
-```bash
-## 📁 SAÉ_S2_02
+```graphql
+📁 SAÉ_S2_02
 │── 📄 main.cpp          # Programme principal
 │── 📄 generateInstance.cpp  # Génération des instances
 │── 📄 mst.cpp           # Algorithme de Prim (MST)
@@ -37,23 +37,24 @@ L'algorithme suit trois grandes étapes :
 
 ## 🚀 Installation et Exécution
 1️⃣ Compilation
-bash
-Copy
-Edit
+```bash
 g++ -o tsp main.cpp generateInstance.cpp mst.cpp christofides.cpp utils.cpp -O2
+```
+
 2️⃣ Exécution
-bash
-Copy
-Edit
+```bash
 ./tsp
-Créer un nouveau graphe avec des villes aléatoires.
-Utiliser une instance existante (fichier input.txt).
+```
+
+- Créer un nouveau graphe avec des villes aléatoires.
+- Utiliser une instance existante (fichier input.txt).
 
 ## 📊 Critères d'évaluation
-Qualité du parcours obtenu (Comparaison avec d'autres heuristiques)
-Temps de calcul (Efficacité de l'algorithme sur des instances de grande taille)
+- Qualité du parcours obtenu (Comparaison avec d'autres heuristiques)
+- Temps de calcul (Efficacité de l'algorithme sur des instances de grande taille)
+
 ## 👥 Auteurs
-[Votre Nom]
-[Autres membres du groupe]
+whoselevenn  
+
 Projet réalisé dans le cadre du B.U.T. Informatique - SAÉ S2.02 🎓🚀
 

@@ -13,10 +13,18 @@ struct City
     int y;
 };
 
+struct Node
+{
+    int number;
+    int degree;
+
+    Node(int number, int degree = 0): number(number), degree(degree) {}
+};
+
 struct Edge
 {
-    int start;
-    int destination;
+    Node* start;
+    Node* destination;
     float weight;
 };
 
@@ -90,7 +98,7 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
         }
 
         file.close();
-        std::cout << "Instance generated and saved successfully!" << std::endl;
+        std::cout << "\nInstance generated and saved successfully!" << std::endl;
     }
     else
     {
@@ -113,7 +121,7 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
         }
 
         file.close();
-        std::cout << "Instance imported successfully!" << std::endl;
+        std::cout << "\nInstance imported successfully!" << std::endl;
     }
 
     return distanceMatrix;
@@ -127,7 +135,9 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
     inMST[0] = true;
     for (int i = 1; i < totalCities; i++)
     {
-        pq.push({0, i, distanceMatrix[0][i]});
+        Node* startCity = new Node(0, 0);
+        Node* destinationCity = new Node(i, 0);
+        pq.push({startCity, destinationCity, distanceMatrix[0][i]});
     }
     
     while (!pq.empty() && mst.size() < totalCities - 1)
@@ -135,7 +145,7 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
         Edge edge = pq.top();
         pq.pop();
 
-        int u = edge.destination;
+        int u = edge.destination->number;
         if (inMST[u])
         {
             continue;
@@ -144,11 +154,16 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
         inMST[u] = true;
         mst.push_back(edge);
 
+        edge.start->degree++;
+        edge.destination->degree++;
+        
         for (int v = 0; v < totalCities; v++)
         {
             if (!inMST[v])
             {
-                pq.push({u, v, distanceMatrix[u][v]});
+                Node* startCity = edge.destination;
+                Node* destinationCity = new Node(v, 0);
+                pq.push({startCity, destinationCity, distanceMatrix[u][v]});
             }
         }
     }
@@ -174,10 +189,21 @@ int main(){
 
     std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix);
     
+    std::cout << std::endl;
+    std::cout << "Affichage des edges : " << std::endl;
     for (const Edge& edge : mst)
     {
-        std::cout << "De " << edge.start << " à " << edge.destination << " avec un poids de " << edge.weight << std::endl;
+        std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
     }
-    
+
+    std::cout << std::endl;
+
+    std::cout << "Affichage des degres : " << std::endl;
+    for (const Edge& edge : mst)
+    {
+        std::cout << "Node " << edge.start->number << ": degre " << edge.start->degree << std::endl;
+        std::cout << "Node " << edge.destination->number << ": degre " << edge.destination->degree << std::endl;
+    }
+
     return 0;
 }

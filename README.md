@@ -24,12 +24,7 @@ L'algorithme suit trois grandes étapes :
 ```graphql
 📁 SAÉ_S2_02
 │── 📄 main.cpp          # Programme principal
-│── 📄 generateInstance.cpp  # Génération des instances
-│── 📄 mst.cpp           # Algorithme de Prim (MST)
-│── 📄 christofides.cpp  # Implémentation complète de Christofides (en cours)
-│── 📄 utils.cpp         # Fonctions utilitaires (calcul de distances, affichage, etc.)
-│── 📄 input.txt         # Fichier contenant une instance du TSP
-│── 📄 output.txt        # Résultat final du TSP
+│── 📄 instance.txt      # Fichier contenant une instance du TSP
 │── 📄 README.md         # Documentation du projet
 ```
 

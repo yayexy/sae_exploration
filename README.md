@@ -31,12 +31,12 @@ L'algorithme suit trois grandes étapes :
 ## 🚀 Installation et Exécution
 1️⃣ Compilation
 ```bash
-g++ -o tsp main.cpp generateInstance.cpp mst.cpp christofides.cpp utils.cpp -O2
+g++ -o main main.cpp
 ```
 
 2️⃣ Exécution
 ```bash
-./tsp
+./main
 ```
 
 - Créer un nouveau graphe avec des villes aléatoires.

@@ -6,6 +6,7 @@
 #include <ctime>
 #include <limits>
 #include <queue>
+#include <unordered_map>
 
 struct City
 {
@@ -171,6 +172,44 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
     return mst;
 }
 
+// bool findInOddsList(std::vector<Node*> odds, int number){
+//     for (const Node& node : odds)
+//     {
+//         if (node.number == number)
+//         {
+//             return true;
+//         }
+//     }
+
+//     return false;
+// }
+
+std::vector<Node*> findOddsDegreeNodes(std::vector<Edge> mst){
+    std::cout << "\n\nfindOddsDegree: " << std::endl;
+    
+    std::unordered_map<int, Node*> nodeMap;
+    std::unordered_map<int, int> degreeMap;
+
+    for (const Edge& edge : mst)
+    {
+        nodeMap[edge.start->number] = edge.start;
+        nodeMap[edge.destination->number] = edge.destination;
+
+        degreeMap[edge.start->number]++;
+        degreeMap[edge.destination->number]++;
+    }
+
+    std::vector<Node*> oddNodes;
+    for (const auto& pair : degreeMap)
+    {
+        if (pair.second % 2 == 1)
+        {
+            oddNodes.push_back(nodeMap[pair.first]);
+        }
+    }
+    
+    return oddNodes;
+}
 
 int main(){
     srand(time(NULL));
@@ -205,5 +244,12 @@ int main(){
         std::cout << "Node " << edge.destination->number << ": degre " << edge.destination->degree << std::endl;
     }
 
+    std::vector<Node*> odds = findOddsDegreeNodes(mst);
+
+    for (const Node* odd : odds)
+    {
+        std::cout << "Le degre du noeud " << odd->number << " est " << odd->degree << std::endl;
+    }
+    
     return 0;
 }

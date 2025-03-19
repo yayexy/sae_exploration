@@ -172,21 +172,7 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
     return mst;
 }
 
-// bool findInOddsList(std::vector<Node*> odds, int number){
-//     for (const Node& node : odds)
-//     {
-//         if (node.number == number)
-//         {
-//             return true;
-//         }
-//     }
-
-//     return false;
-// }
-
 std::vector<Node*> findOddsDegreeNodes(std::vector<Edge> mst){
-    std::cout << "\n\nfindOddsDegree: " << std::endl;
-    
     std::unordered_map<int, Node*> nodeMap;
     std::unordered_map<int, int> degreeMap;
 
@@ -210,6 +196,10 @@ std::vector<Node*> findOddsDegreeNodes(std::vector<Edge> mst){
     
     return oddNodes;
 }
+
+// void perfectMatching(std::vector<Edge>& edge, const std::vector<Node*>& odds){
+
+// }
 
 int main(){
     srand(time(NULL));
@@ -244,6 +234,7 @@ int main(){
         std::cout << "Node " << edge.destination->number << ": degre " << edge.destination->degree << std::endl;
     }
 
+    std::cout << "\n\nfindOddsDegree: " << std::endl;
     std::vector<Node*> odds = findOddsDegreeNodes(mst);
 
     for (const Node* odd : odds)

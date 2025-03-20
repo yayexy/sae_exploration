@@ -8,18 +8,18 @@
 #include <queue>
 #include <unordered_map>
 
-struct City
-{
-    int x;
-    int y;
-};
-
 struct Node
 {
     int number;
     int degree;
+    int x;
+    int y;
 
-    Node(int number, int degree = 0): number(number), degree(degree) {}
+    // Default constructor
+    Node() : number(0), degree(0), x(0), y(0) {}
+
+    // Constructor with parameters
+    Node(int number, int degree = 0, int x = 0, int y = 0) : number(number), degree(degree), x(x), y(y) {}
 };
 
 struct Edge
@@ -35,7 +35,7 @@ struct Compare {
     }
 };
 
-float calculateDistance(const City& a, const City& b){
+float calculateDistance(const Node& a, const Node& b){
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
@@ -48,13 +48,13 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
         std::cin >> totalCities;
 
         distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
-        std::vector<City> cities(totalCities);
+        std::vector<Node> cities;
+        cities.reserve(totalCities); // Reserving but no Node creation (I don't have access to number)
 
-        // Randomly generating city coordinates
+        // Randomly generating cities
         for (int i = 0; i < totalCities; i++)
         {
-            cities[i].x = rand() % areaSize;
-            cities[i].y = rand() % areaSize;
+            cities.emplace_back(i, 0, rand() % areaSize, rand() % areaSize); // Now I can create Node objects (I have access to number)
         }
 
         for (int i = 0; i < totalCities; i++)

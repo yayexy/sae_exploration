@@ -7,6 +7,7 @@
 #include <limits>
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
 
 struct Node
 {
@@ -39,16 +40,7 @@ float calculateDistance(const Node& a, const Node& b){
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
-void deleteNodes(std::vector<Node*>& nodes){
-    for (Node* node : nodes)
-    {
-        delete node;
-    }
-    
-    nodes.clear();
-}
-
-std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice){
+std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice, std::vector<Node>& cities){
     std::vector<std::vector<float>> distanceMatrix;
 
     if (choice == 1)
@@ -57,8 +49,6 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
         std::cin >> totalCities;
 
         distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
-        std::vector<Node> cities;
-        cities.reserve(totalCities); // Reserving but no Node creation (I don't have access to number)
 
         // Randomly generating cities
         for (int i = 0; i < totalCities; i++)
@@ -107,6 +97,12 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
             file << std::endl;
         }
 
+        // Write the coordinates of the cities to the file
+        for (int i = 0; i < totalCities; i++)
+        {
+            file << cities[i].x << " " << cities[i].y << std::endl;
+        }
+
         file.close();
         std::cout << "\nInstance generated and saved successfully!" << std::endl;
     }
@@ -122,12 +118,22 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
         file >> totalCities;
         distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
         
+        cities.clear();
+        cities.resize(totalCities);
+
         for (int i = 0; i < totalCities; i++)
         {
             for (int j = 0; j < totalCities; j++)
             {
                 file >> distanceMatrix[i][j];
             }
+        }
+
+        for (int i = 0; i < totalCities; i++)
+        {
+            file >> cities[i].x >> cities[i].y;
+            cities[i].number = i;
+            cities[i].degree = 0;
         }
 
         file.close();
@@ -137,7 +143,7 @@ std::vector<std::vector<float>> generateInstance(int& totalCities, const int& ar
     return distanceMatrix;
 }
 
-std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::vector<float>>& distanceMatrix, std::vector<Node*>& nodes) {
+std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::vector<float>>& distanceMatrix, std::vector<Node>& cities) {
     std::vector<Edge> mst; // Stores the edges of the Minimum Spanning Tree (MST)
     std::vector<bool> inMST(totalCities, false); // Tracks whether a node is included in the MST
     std::priority_queue<Edge, std::vector<Edge>, Compare> pq; // Priority queue (min-heap)
@@ -145,11 +151,7 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
     inMST[0] = true;
     for (int i = 1; i < totalCities; i++)
     {
-        Node* startCity = new Node(0, 0);
-        Node* destinationCity = new Node(i, 0);
-        pq.push({startCity, destinationCity, distanceMatrix[0][i]});
-        nodes.push_back(startCity);
-        nodes.push_back(destinationCity);
+        pq.push({&cities[0], &cities[i], distanceMatrix[0][i]});
     }
     
     while (!pq.empty() && mst.size() < totalCities - 1)
@@ -173,9 +175,7 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
         {
             if (!inMST[v])
             {
-                Node* startCity = edge.destination;
-                Node* destinationCity = new Node(v, 0);
-                pq.push({startCity, destinationCity, distanceMatrix[u][v]});
+                pq.push({edge.destination, &cities[v], distanceMatrix[u][v]});
             }
         }
     }
@@ -183,7 +183,7 @@ std::vector<Edge> primAlgorithm(const int& totalCities, const std::vector<std::v
     return mst;
 }
 
-std::vector<Node*> findOddsDegreeNodes(std::vector<Edge> mst){
+std::vector<Node*> findOddsDegreeNodes(std::vector<Edge>& mst){
     std::unordered_map<int, Node*> nodeMap;
     std::unordered_map<int, int> degreeMap;
 
@@ -208,31 +208,31 @@ std::vector<Node*> findOddsDegreeNodes(std::vector<Edge> mst){
     return oddNodes;
 }
 
-// void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
-//     while (!odds.empty())
-//     {
-//         Node* v = odds.back();
-//         odds.pop_back();
+void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
+    while (!odds.empty())
+    {
+        Node* start = odds.back();
+        odds.pop_back();
 
-//         Node* closest = nullptr;
-//         float length = std::numeric_limits<float>::max();
+        Node* closest = nullptr;
+        float weight = std::numeric_limits<float>::max();
 
-//         for (Node* u : odds)
-//         {
-//             if (calculateDistance(*u, *v) < length)
-//             {
-//                 length = calculateDistance(*u, *v);
-//                 closest = u;
-//             }
-//         }
+        for (Node* destination : odds)
+        {
+            if (calculateDistance(*start, *destination) < weight)
+            {
+                weight = calculateDistance(*start, *destination);
+                closest = destination;
+            }
+        }
         
-//         if (closest)
-//         {
-//             mst.push_back({closest, v, length});
-//             odds.erase(std::remove(odds.begin(), odds.end(), closest), odds.end());
-//         }
-//     }
-// }
+        if (closest)
+        {
+            mst.push_back({start, closest, weight});
+            odds.erase(std::remove(odds.begin(), odds.end(), closest), odds.end());
+        }
+    }
+}
 
 int main(){
     srand(time(NULL));
@@ -240,7 +240,7 @@ int main(){
     int areaSize = 1000;
     int totalCities;
     int choice;
-    std::vector<Node*> nodes(totalCities);
+    std::vector<Node> cities; // Changed to store Node objects directly
 
     do
     {
@@ -248,9 +248,9 @@ int main(){
         std::cin >> choice;
     } while (choice != 0 && choice != 1);
     
-    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice);
+    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice, cities);
 
-    std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix, nodes);
+    std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix, cities);
     
     std::cout << std::endl;
     std::cout << "Affichage des edges : " << std::endl;
@@ -274,17 +274,24 @@ int main(){
     for (const Node* odd : odds)
     {
         std::cout << "Le degre du noeud " << odd->number << " est " << odd->degree << std::endl;
+        std::cout << "Coordinates : (" << odd->x << ", " << odd->y << ")" << std::endl;
     }
 
-    // perfectMatching(mst, odds);
+    std::cout << std::endl;
+    std::cout << "Affichage des edges (avant) : " << std::endl;
+    for (const Edge& edge : mst)
+    {
+        std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
+    }
 
-    // std::cout << std::endl;
-    // std::cout << "Affichage des edges : " << std::endl;
-    // for (const Edge& edge : mst)
-    // {
-    //     std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
-    // }
+    perfectMatching(mst, odds);
 
-    deleteNodes(nodes);
+    std::cout << std::endl;
+    std::cout << "Affichage des edges (apres) : " << std::endl;
+    for (const Edge& edge : mst)
+    {
+        std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
+    }
+
     return 0;
 }

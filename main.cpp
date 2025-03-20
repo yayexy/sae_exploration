@@ -8,6 +8,7 @@
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
+#include <stack>
 
 struct Node
 {
@@ -234,6 +235,56 @@ void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
     }
 }
 
+// std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
+//     std::vector<bool> inEulerianCircuit(totalCities, false); // Tracks whether a node is included in the circuit
+//     std::vector<int> circuit;  // This will store the Eulerian Circuit
+//     std::stack<Node*> stack;
+//     std::unordered_map<int, std::vector<Edge>> adjList;
+
+//     // Fill the adjList with MST edges
+//     for (const Edge& edge : mst) {
+//         adjList[edge.start->number].push_back(edge);
+//         adjList[edge.destination->number].push_back(edge);
+//     }
+    
+//     // Start circuit with the node 0
+//     stack.push(mst[0].start);
+
+//     while (!stack.empty()) {
+//         Node* currentNode = stack.top();
+
+//         if (!adjList[currentNode->number].empty()) { // If the node still has neighbors
+//             // Get the last edge in the adjacency list
+//             Edge edge = adjList[currentNode->number].back();
+//             adjList[currentNode->number].pop_back();
+
+//             // Remove the edge from the destination node's adjacency list as well
+//             adjList[edge.destination->number].erase(
+//                 std::remove_if(adjList[edge.destination->number].begin(), adjList[edge.destination->number].end(),
+//                                [&](const Edge& e) { return e.start == edge.start && e.destination == edge.destination; }),
+//                 adjList[edge.destination->number].end());
+
+//             // Add current node to the circuit (only when you move to a new node)
+//             if (!inEulerianCircuit[currentNode->number]) {
+//                 circuit.push_back(currentNode->number);
+//                 inEulerianCircuit[currentNode->number] = true;
+//             }
+
+//             // Move to the next node
+//             stack.push(edge.destination);
+//         } else { // If the node has no more neighbors, add it to the circuit and backtrack
+//             circuit.push_back(currentNode->number);
+//             stack.pop();
+//         }
+//     }
+
+//     return circuit;
+// }
+
+// std::vector<int> findHamiltonianCycle(const std::vector<Node>& cities){
+
+// }
+
 int main(){
     srand(time(NULL));
 
@@ -241,6 +292,7 @@ int main(){
     int totalCities;
     int choice;
     std::vector<Node> cities; // Changed to store Node objects directly
+    std::vector<int> circuit; // Vector for eulerian circuit
 
     do
     {
@@ -292,6 +344,17 @@ int main(){
     {
         std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
     }
+
+    // circuit = findEulerianCircuit(mst, totalCities);
+
+    // std::cout << std::endl;
+    // std::cout << "Circuit eulerien : " << std::endl;
+    // std::cout << "[";
+    // for (const int& node : circuit)
+    // {
+    //     std::cout << node << ", ";
+    // }
+    // std::cout << "]" << std::endl;
 
     return 0;
 }

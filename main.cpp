@@ -209,9 +209,9 @@ std::vector<Node*> findOddsDegreeNodes(std::vector<Edge>& mst){
     return oddNodes;
 }
 
-
-// Faut je verifie que apres le perfect matching ya bien tous les noeuds pairs. Que la nouvelle verification na pas de consequence sur les degres pairs.
 void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
+    std::unordered_map<int, int> degreeMap;
+
     while (!odds.empty())
     {
         Node* start = odds.back();
@@ -231,24 +231,36 @@ void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
         
         if (closest)
         {
-            bool alreadyExists = false;
-            for (const Edge& edge : mst)
-            {
-                if ((edge.start == start && edge.destination == closest) || (edge.start == closest && edge.destination == start))
-                {
-                    alreadyExists = true;
-                    break;
-                }
-            }
-            
-            if (!alreadyExists)
-            {
-                mst.push_back({start, closest, weight});
-            }
+            mst.push_back({start, closest, weight});
+            start->degree++;
+            closest->degree++;
 
             odds.erase(std::remove(odds.begin(), odds.end(), closest), odds.end());
         }
     }
+
+    // Étape 2 : Vérifier si des noeuds sont encore impairs et donc les supprimer
+    for (const Edge& edge : mst)
+    {
+        degreeMap[edge.start->number]++;
+        degreeMap[edge.destination->number]++;
+    }
+    
+    std::vector<Edge> filteredEdges;
+    for (const Edge& edge : mst)
+    {
+        if (degreeMap[edge.start->number] % 2 == 1 && degreeMap[edge.destination->number] % 2 == 1)
+        {
+            degreeMap[edge.start->number]--;
+            degreeMap[edge.destination->number]--;
+        }
+        else
+        {
+            filteredEdges.push_back(edge);
+        }
+    }
+    
+    mst = filteredEdges;
 }
 
 std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
@@ -386,6 +398,15 @@ int main(){
     for (const Edge& edge : mst)
     {
         std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
+    }
+
+    std::cout << "\n\nfindOddsDegree: " << std::endl;
+    std::vector<Node*> odds1 = findOddsDegreeNodes(mst);
+
+    for (const Node* odd : odds1)
+    {
+        std::cout << "Le degre du noeud " << odd->number << " est " << odd->degree << std::endl;
+        std::cout << "Coordinates : (" << odd->x << ", " << odd->y << ")" << std::endl;
     }
 
     circuit = findEulerianCircuit(mst, totalCities);

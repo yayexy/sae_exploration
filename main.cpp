@@ -229,10 +229,51 @@ void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
         
         if (closest)
         {
-            mst.push_back({start, closest, weight});
+            bool alreadyExists = false;
+            for (const Edge& edge : mst)
+            {
+                if ((edge.start == start && edge.destination == closest) || (edge.start == closest && edge.destination == start))
+                {
+                    alreadyExists = true;
+                    break;
+                }
+            }
+            
+            if (!alreadyExists)
+            {
+                mst.push_back({start, closest, weight});
+            }
+
             odds.erase(std::remove(odds.begin(), odds.end(), closest), odds.end());
         }
     }
+}
+
+std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
+    std::vector<int> circuit; // This will store the Eulerian Circuit
+    std::stack<int> stack;
+    std::unordered_map<int, std::vector<int>> adjList;
+
+    int curr_v = 0;
+
+    for (const Edge& edge : mst)
+    {
+        adjList[edge.start->number].push_back(edge.destination->number);
+        adjList[edge.destination->number].push_back(edge.start->number);
+    }
+    
+    std::cout << "\nListe d'adjacence : " << std::endl;
+    for (int i = 0; i < adjList.size(); i++)
+    {
+        std::cout << "Noeud " << i << " : [";
+        for (int j = 0; j < adjList[i].size(); j++)
+        {
+            std::cout << adjList[i][j] << ", ";
+        }
+        std::cout << "]" << std::endl;
+    }
+
+    return circuit;
 }
 
 // std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
@@ -345,7 +386,7 @@ int main(){
         std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
     }
 
-    // circuit = findEulerianCircuit(mst, totalCities);
+    circuit = findEulerianCircuit(mst, totalCities);
 
     // std::cout << std::endl;
     // std::cout << "Circuit eulerien : " << std::endl;

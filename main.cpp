@@ -80,6 +80,16 @@ void printAdjacencyList(std::unordered_map<int, std::vector<int>> adjList){
     }
 }
 
+void printEulerianCircuit(std::vector<int> circuit){
+    std::cout << "\nCircuit eulerien : " << std::endl;
+    std::cout << "[";
+    for (const int& node : circuit)
+    {
+        std::cout << node << ", ";
+    }
+    std::cout << "]" << std::endl;
+}
+
 std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice, std::vector<Node>& cities){
     std::vector<std::vector<float>> distanceMatrix;
 
@@ -303,11 +313,9 @@ void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
 }
 
 std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
+    std::unordered_map<int, std::vector<int>> adjList; // Adjacency list with node neighbors
     std::vector<int> circuit; // This will store the Eulerian Circuit
     std::stack<int> stack;
-    std::unordered_map<int, std::vector<int>> adjList;
-
-    int curr_v = 0;
 
     for (const Edge& edge : mst)
     {
@@ -317,48 +325,48 @@ std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& to
     
     printAdjacencyList(adjList);
 
+    int startNode = mst[0].start->number;
+    stack.push(startNode);
+
+    while (!stack.empty())
+    {
+        int currentNode = stack.top();
+    }
+
     return circuit;
 }
 
-// std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& totalCities){
-//     std::vector<bool> inEulerianCircuit(totalCities, false); // Tracks whether a node is included in the circuit
-//     std::vector<int> circuit;  // This will store the Eulerian Circuit
-//     std::stack<Node*> stack;
-//     std::unordered_map<int, std::vector<Edge>> adjList;
+// std::vector<int> findEulerianCircuit(std::vector<Edge>& mst, int totalCities) {
+//     std::unordered_map<int, std::vector<int>> adjacencyList; // Adjacency list with node neighbors
+//     std::vector<int> circuit;  
+//     std::stack<int> stack;
 
-//     // Fill the adjList with MST edges
+//     // Build the adjacency list
 //     for (const Edge& edge : mst) {
-//         adjList[edge.start->number].push_back(edge);
-//         adjList[edge.destination->number].push_back(edge);
+//         adjacencyList[edge.start->number].push_back(edge.destination->number);
+//         adjacencyList[edge.destination->number].push_back(edge.start->number);
 //     }
-    
-//     // Start circuit with the node 0
-//     stack.push(mst[0].start);
+
+//     // Find a valid starting node (a node with at least one edge)
+//     int startNode = mst[0].start->number; 
+//     stack.push(startNode);
 
 //     while (!stack.empty()) {
-//         Node* currentNode = stack.top();
+//         int currentNode = stack.top();
 
-//         if (!adjList[currentNode->number].empty()) { // If the node still has neighbors
-//             // Get the last edge in the adjacency list
-//             Edge edge = adjList[currentNode->number].back();
-//             adjList[currentNode->number].pop_back();
+//         // If the node still has neighbors
+//         if (!adjacencyList[currentNode].empty()) {
+//             int nextNode = adjacencyList[currentNode].back();  // Last neighbor
+//             adjacencyList[currentNode].pop_back();  // Remove the edge (current -> next)
 
-//             // Remove the edge from the destination node's adjacency list as well
-//             adjList[edge.destination->number].erase(
-//                 std::remove_if(adjList[edge.destination->number].begin(), adjList[edge.destination->number].end(),
-//                                [&](const Edge& e) { return e.start == edge.start && e.destination == edge.destination; }),
-//                 adjList[edge.destination->number].end());
+//             // Also remove the edge in the opposite direction (next -> current)
+//             auto& neighbors = adjacencyList[nextNode];
+//             neighbors.erase(std::find(neighbors.begin(), neighbors.end(), currentNode));
 
-//             // Add current node to the circuit (only when you move to a new node)
-//             if (!inEulerianCircuit[currentNode->number]) {
-//                 circuit.push_back(currentNode->number);
-//                 inEulerianCircuit[currentNode->number] = true;
-//             }
-
-//             // Move to the next node
-//             stack.push(edge.destination);
-//         } else { // If the node has no more neighbors, add it to the circuit and backtrack
-//             circuit.push_back(currentNode->number);
+//             stack.push(nextNode); // Move to the next node
+//         } else {
+//             // If no more neighbors, add the node to the final circuit and backtrack
+//             circuit.push_back(currentNode);
 //             stack.pop();
 //         }
 //     }
@@ -411,6 +419,7 @@ int main() {
     // --- CALCUL DU CIRCUIT EULÉRIEN ---
     std::cout << "\n=== Circuit Eulerien ===\n";
     circuit = findEulerianCircuit(mst, totalCities);
+    printEulerianCircuit(circuit);
 
     return 0;
 }

@@ -209,6 +209,8 @@ std::vector<Node*> findOddsDegreeNodes(std::vector<Edge>& mst){
     return oddNodes;
 }
 
+
+// Faut je verifie que apres le perfect matching ya bien tous les noeuds pairs. Que la nouvelle verification na pas de consequence sur les degres pairs.
 void perfectMatching(std::vector<Edge>& mst, std::vector<Node*>& odds){
     while (!odds.empty())
     {

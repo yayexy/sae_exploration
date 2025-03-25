@@ -340,85 +340,72 @@ std::vector<int> findEulerianCircuit(const std::vector<Edge>& mst, const int& to
 
 // }
 
-int main(){
-    srand(time(NULL));
-
-    int areaSize = 1000;
-    int totalCities;
-    int choice;
-    std::vector<Node> cities; // Changed to store Node objects directly
-    std::vector<int> circuit; // Vector for eulerian circuit
-
-    do
-    {
-        std::cout << "Do you want to create a new graph or use an existing one? (1 - Yes / 0 - No): ";
-        std::cin >> choice;
-    } while (choice != 0 && choice != 1);
-    
-    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice, cities);
-
-    std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix, cities);
-    
-    std::cout << std::endl;
-    std::cout << "Affichage des edges : " << std::endl;
+void printEdges(const std::vector<Edge>& mst){
+    std::cout << "\nAffichage des edges : " << std::endl;
     for (const Edge& edge : mst)
     {
         std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
     }
+}
 
-    std::cout << std::endl;
-
-    std::cout << "Affichage des degres : " << std::endl;
-    for (const Edge& edge : mst)
-    {
-        std::cout << "Node " << edge.start->number << ": degre " << edge.start->degree << std::endl;
-        std::cout << "Node " << edge.destination->number << ": degre " << edge.destination->degree << std::endl;
-    }
-
-    std::cout << "\n\nfindOddsDegree: " << std::endl;
-    std::vector<Node*> odds = findOddsDegreeNodes(mst);
-
+void printOddDegreeNodes(std::vector<Edge>& mst, std::vector<Node*>& odds){
+    std::cout << "\nfindOddsDegree: " << std::endl;
     for (const Node* odd : odds)
     {
         std::cout << "Le degre du noeud " << odd->number << " est " << odd->degree << std::endl;
         std::cout << "Coordinates : (" << odd->x << ", " << odd->y << ")" << std::endl;
     }
+}
 
-    std::cout << std::endl;
-    std::cout << "Affichage des edges (avant) : " << std::endl;
+void printNodesDegree(std::vector<Edge>& mst){
+    std::cout << "\nAffichage des degres : " << std::endl;
     for (const Edge& edge : mst)
     {
-        std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
+        std::cout << "Node " << edge.start->number << ": degre " << edge.start->degree << std::endl;
+        std::cout << "Node " << edge.destination->number << ": degre " << edge.destination->degree << std::endl;
     }
+}
 
+int main() {
+    srand(time(NULL));
+
+    int areaSize = 1000;
+    int totalCities;
+    int choice;
+    std::vector<Node> cities; 
+    std::vector<int> circuit; // Stocke le circuit eulérien
+
+    // --- CHOIX DU MODE DE GÉNÉRATION DU GRAPHE ---
+    do {
+        std::cout << "Do you want to create a new graph or use an existing one? (1 - Yes / 0 - No): ";
+        std::cin >> choice;
+    } while (choice != 0 && choice != 1);
+
+    // --- GÉNÉRATION DU GRAPHE ---
+    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice, cities);
+
+    // --- CALCUL DE L'ARBRE COUVRANT MINIMAL (MST) ---
+    std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix, cities);
+    
+    std::cout << "\n=== Arbre couvrant minimal (MST) ===\n";
+    printEdges(mst);
+    printNodesDegree(mst);
+
+    // --- IDENTIFICATION DES NŒUDS DE DEGRÉ IMPAIR ---
+    std::vector<Node*> odds = findOddsDegreeNodes(mst);
+    
+    std::cout << "\n=== Noeuds de degre impair ===\n";
+    printOddDegreeNodes(mst, odds);
+
+    // --- APPLICATION DU PERFECT MATCHING ---
     perfectMatching(mst, odds);
 
-    std::cout << std::endl;
-    std::cout << "Affichage des edges (apres) : " << std::endl;
-    for (const Edge& edge : mst)
-    {
-        std::cout << "De " << edge.start->number << " à " << edge.destination->number << " avec un poids de " << edge.weight << std::endl;
-    }
+    std::cout << "\n=== Graphe apres Perfect Matching ===\n";
+    printEdges(mst);
+    printNodesDegree(mst);
 
-    std::cout << "\n\nfindOddsDegree: " << std::endl;
-    std::vector<Node*> odds1 = findOddsDegreeNodes(mst);
-
-    for (const Node* odd : odds1)
-    {
-        std::cout << "Le degre du noeud " << odd->number << " est " << odd->degree << std::endl;
-        std::cout << "Coordinates : (" << odd->x << ", " << odd->y << ")" << std::endl;
-    }
-
+    // --- CALCUL DU CIRCUIT EULÉRIEN ---
     circuit = findEulerianCircuit(mst, totalCities);
-
-    // std::cout << std::endl;
-    // std::cout << "Circuit eulerien : " << std::endl;
-    // std::cout << "[";
-    // for (const int& node : circuit)
-    // {
-    //     std::cout << node << ", ";
-    // }
-    // std::cout << "]" << std::endl;
 
     return 0;
 }

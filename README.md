@@ -30,9 +30,27 @@ L'algorithme suit trois grandes étapes :
 ## 📂 Structure du projet
 ```graphql
 📁 SAÉ_S2_02
-│── 📄 main.cpp          # Programme principal
-│── 📄 instance.txt      # Fichier contenant une instance du TSP
-│── 📄 README.md         # Documentation du projet
+│
+│── 📁 src
+│ │── 📄 main.cpp              # Programme principal
+│ │── 📄 mst.cpp               # Algorithme de Prim (MST)
+│ │── 📄 christofides.cpp      # Algorithme de Christofides
+│ │── 📄 generateInstance.cpp  # Génération des instances
+│ │── 📄 utils.cpp             # Fonctions utilitaires
+│
+│── 📁 include
+│ │── 📄 mst.hpp               # Header de l'algorithme de Prim (MST)
+│ │── 📄 christofides.hpp      # Header de l'algorithme de Christofides
+│ │── 📄 generateInstance.hpp  # Header du générateur d'instances
+│ │── 📄 utils.hpp             # Header des fonctions utilitaires
+│ │── 📄 structures.hpp        # Définition des structures Node, Edge, Compare
+│
+│── 📁 data
+│ │── 📄 input.txt             # Instance du problème TSP
+│ │── 📄 output.txt            # Sortie du problème TSP
+│
+│── 📄 README.md               # Documentation du projet
+│── 📄 Makefile                # Compilation du projet
 ```
 
 ## 🚀 Installation et Exécution

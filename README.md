@@ -56,7 +56,7 @@ L'algorithme suit trois grandes étapes :
 ## 🚀 Installation et Exécution
 1️⃣ Compilation
 ```bash
-g++ -o main main.cpp
+g++ -o main main.cpp mst.cpp christofides.cpp generateInstance.cpp utils.cpp
 ```
 
 2️⃣ Exécution

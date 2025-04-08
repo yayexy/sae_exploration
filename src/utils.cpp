@@ -57,3 +57,13 @@ void printEulerianCircuit(std::vector<int> circuit){
     }
     std::cout << "]" << std::endl;
 }
+
+void printHamiltonianCycle(std::vector<int> circuit){
+    std::cout << "\nCycle hamiltonien : " << std::endl;
+    std::cout << "[";
+    for (const int& node : circuit)
+    {
+        std::cout << node << ", ";
+    }
+    std::cout << "]" << std::endl;
+}

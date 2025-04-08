@@ -24,6 +24,7 @@ int main() {
     int choice;
     std::vector<Node> cities; 
     std::vector<int> circuit; // Stocke le circuit eulérien
+    std::vector<int> cycle;
 
     // --- CHOIX DU MODE DE GÉNÉRATION DU GRAPHE ---
     do {
@@ -58,6 +59,11 @@ int main() {
     std::cout << "\n=== Circuit Eulerien ===\n";
     circuit = findEulerianCircuit(mst, totalCities);
     printEulerianCircuit(circuit);
+
+    // --- CALCUL DU CYCLE HAMILTONIEN ---
+    std::cout << "\n=== Cycle Hamiltonien ===\n";
+    cycle = findHamiltonianCycle(circuit, cities);
+    printHamiltonianCycle(cycle);
 
     return 0;
 }

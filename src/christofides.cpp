@@ -2,6 +2,7 @@
 #include <stack>
 #include <limits>
 #include <algorithm>
+#include <unordered_set>
 
 #include "../include/utils.hpp"
 
@@ -122,6 +123,19 @@ std::vector<int> findEulerianCircuit(std::vector<Edge>& mst, int totalCities) {
     return circuit;
 }
 
-// std::vector<int> findHamiltonianCycle(const std::vector<Node>& cities){
+std::vector<int> findHamiltonianCycle(const std::vector<int>& circuit, const std::vector<Node>& cities) {
+    std::vector<int> hamiltonian;
+    std::unordered_set<int> visited;
 
-// }
+    for (int cityIndex : circuit) {
+        if (visited.find(cityIndex) == visited.end()) {
+            visited.insert(cityIndex);
+            hamiltonian.push_back(cityIndex);
+        }
+    }
+
+    // Pour faire un cycle, on revient au point de départ
+    hamiltonian.push_back(circuit[0]);
+    
+    return hamiltonian;
+}

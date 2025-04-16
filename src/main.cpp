@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <algorithm>
 #include <stack>
+#include <string>
+#include <chrono>
 
 #include "../include/structures.hpp"
 #include "../include/utils.hpp"
@@ -16,7 +18,9 @@
 #include "../include/mst.hpp"
 #include "../include/christofides.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
+    auto start = std::chrono::high_resolution_clock::now();
+
     srand(time(NULL));
 
     int areaSize = 1000;
@@ -27,13 +31,30 @@ int main() {
     std::vector<int> cycle;
 
     // --- CHOIX DU MODE DE GÉNÉRATION DU GRAPHE ---
-    do {
-        std::cout << "Do you want to create a new graph or use an existing one? (1 - Yes / 0 - No): ";
-        std::cin >> choice;
-    } while (choice != 0 && choice != 1);
+    if (argc == 2 || argc == 3) // 2 if the choice is 0, don't need the second argument. Otherwise, 2 arguments needed if argument 1 is 1
+    {
+        try 
+        {
+            choice = std::stoi(argv[1]);
+            std::cout << "Choice (from argument) : " << choice << std::endl;
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "Erreur ! L'argument est invalide ! " << std::endl;
+            return 1;
+        }
+    }
+    else
+    {
+        do {
+            std::cout << "Do you want to create a new graph or use an existing one? (1 - Yes / 0 - No): ";
+            std::cin >> choice;
+        } while (choice != 0 && choice != 1); 
+    }
 
     // --- GÉNÉRATION DU GRAPHE ---
-    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice, cities);
+    const char* citiesArg = (argc == 3) ? argv[2] : nullptr;
+    std::vector<std::vector<float>> distanceMatrix = generateInstance(totalCities, areaSize, choice, cities, citiesArg);
 
     // --- CALCUL DE L'ARBRE COUVRANT MINIMAL (MST) ---
     std::vector<Edge> mst = primAlgorithm(totalCities, distanceMatrix, cities);
@@ -64,6 +85,10 @@ int main() {
     std::cout << "\n=== Cycle Hamiltonien ===\n";
     cycle = findHamiltonianCycle(circuit, cities);
     printHamiltonianCycle(cycle);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "\nExecution time: " << elapsed.count() << " s\n";
 
     return 0;
 }

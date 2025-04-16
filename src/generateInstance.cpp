@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 #include "../include/utils.hpp"
 
@@ -91,13 +92,28 @@ void importInstanceFromFile(std::vector<std::vector<float>>& distanceMatrix, std
     file.close();
 }
 
-std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice, std::vector<Node>& cities){
+std::vector<std::vector<float>> generateInstance(int& totalCities, const int& areaSize, const int& choice, std::vector<Node>& cities, const char* citiesArg = nullptr){
     std::vector<std::vector<float>> distanceMatrix;
 
     if (choice == 1)
-    {
-        std::cout << "Enter the number of cities: ";
-        std::cin >> totalCities;
+    {   
+        if (citiesArg == nullptr)
+        {
+            std::cout << "Enter the number of cities: ";
+            std::cin >> totalCities;
+        }
+        else 
+        {
+            try 
+            {
+                totalCities = std::stoi(citiesArg);
+                std::cout << "Total cities (from argument) : " << totalCities << std::endl;
+            }
+            catch (const std::exception& e) {
+                std::cerr << "Erreur de conversion pour le nombre de villes. Valeur par défaut ?\n";
+                std::cin >> totalCities;
+            }
+        }
 
         distanceMatrix.resize(totalCities, std::vector<float>(totalCities));
 

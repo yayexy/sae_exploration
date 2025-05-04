@@ -6,7 +6,7 @@ times = []
 
 with open("execution_times.csv", "r") as f:
     reader = csv.reader(f)
-    next(reader)  # Skip the header
+    next(reader)
     for row in reader:
         sizes.append(int(row[0]))
         times.append(float(row[1]))

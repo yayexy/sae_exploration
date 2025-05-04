@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <unordered_map>
+#include <fstream>
 
 #include "../include/structures.hpp"
 
@@ -79,4 +80,32 @@ float calculateTotalCost(const std::vector<int>& cycle, const std::vector<std::v
     cost += distanceMatrix[cycle.back()][cycle[0]];
 
     return cost;
+}
+
+void printFinalResult(const std::vector<int>& cycle, const std::vector<std::vector<float>>& distanceMatrix) {
+    float totalCost = calculateTotalCost(cycle, distanceMatrix);
+
+    // Affichage console
+    std::cout << "\n=== Final Hamiltonian Cycle ===\n";
+    for (int node : cycle) {
+        std::cout << node << " -> ";
+    }
+    std::cout << cycle.front() << std::endl;
+    std::cout << "Total Cost: " << totalCost << std::endl;
+
+    // Écriture dans output.txt
+    std::ofstream outputFile("../data/output.txt");
+    if (!outputFile) {
+        std::cerr << "Error: couldn't open output.txt for writing.\n";
+        return;
+    }
+
+    outputFile << "Final Hamiltonian Cycle:\n";
+    for (int node : cycle) {
+        outputFile << node << " -> ";
+    }
+    outputFile << cycle.front() << "\n";
+
+    outputFile << "Total Cost: " << totalCost << "\n";
+    outputFile.close();
 }

@@ -80,5 +80,7 @@ int main(int argc, char* argv[]) {
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Execution time: " << elapsed.count() << " s\n";
 
+    printFinalResult(cycle, distanceMatrix);
+
     return 0;
 }

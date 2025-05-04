@@ -134,8 +134,5 @@ std::vector<int> findHamiltonianCycle(const std::vector<int>& circuit, const std
         }
     }
 
-    // Pour faire un cycle, on revient au point de départ
-    hamiltonian.push_back(circuit[0]);
-    
     return hamiltonian;
 }

@@ -1,0 +1,3 @@
+Final Hamiltonian Cycle:
+0 -> 1 -> 4 -> 9 -> 3 -> 8 -> 2 -> 7 -> 6 -> 5 -> 0
+Total Cost: 3511.18

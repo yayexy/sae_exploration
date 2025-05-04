@@ -67,3 +67,16 @@ void printHamiltonianCycle(std::vector<int> circuit){
     }
     std::cout << "]" << std::endl;
 }
+
+float calculateTotalCost(const std::vector<int>& cycle, const std::vector<std::vector<float>>& distanceMatrix) {
+    float cost = 0.0;
+
+    for (size_t i = 0; i < cycle.size() - 1; ++i) {
+        cost += distanceMatrix[cycle[i]][cycle[i + 1]];
+    }
+
+    // Add cost to return to the start (cycle is closed)
+    cost += distanceMatrix[cycle.back()][cycle[0]];
+
+    return cost;
+}
